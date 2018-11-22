@@ -7,11 +7,11 @@ namespace Conexion
 {
     public class ConexionBase
     {
-        static  string host = "127.0.0.1";
+        static  string host = "mysql5019.site4now.net";
         static int port = 3306;
-        static string database = "zoochiloan";
-        static string username = "root";
-        static string password = "";
+        static string database = "db_a42b84_zoo";
+        static string username = "a42b84_zoo";
+        static string password = "itachi313";
 
         public static MySqlConnection GetDBConnection()
         {
