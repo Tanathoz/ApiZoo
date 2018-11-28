@@ -67,7 +67,7 @@ namespace Conexion.Controllers
                     reader.Read();
                     animal = new AnimalViewModel()
                     {
-                        id = Convert.ToInt32(reader["id"]),
+                      
                         nombreCientifico = reader["nombreCientifico"].ToString(),
                         nombreComun = reader["nombreComun"].ToString(),
                         familia = reader["familia"].ToString(),
@@ -160,13 +160,15 @@ namespace Conexion.Controllers
             using (MySqlConnection conexion = ConexionBase.GetDBConnection())
             {
                 conexion.Open();
-                string insert = "insert into veterinarios values ('" + animal.id + "', '" + animal.nombreCientifico + "', '" + animal.nombreComun + "', '" + animal.familia + "', '" + animal.clase + "', '" + animal.orden + "', '" + animal.especie + "', '" + animal.habitat + "', '" + animal.gestacion + "', '" + animal.camada + "', '" + animal.longevidad + "', '" + animal.peso + "', '" + animal.ubicacionGeografica + "', '" + animal.alimentacion + "' );";
+                string insert = "insert into animal (id, nombreCientifico, nombreComun, familia, clase, orden, especie, habitat,gestacion, camada, longevidad, peso, ubicacionGeografica, alimentacion ) values ('" + animal.id + "', '" + animal.nombreCientifico + "', '" + animal.nombreComun + "', '" + animal.familia + "', '" + animal.clase + "', '" + animal.orden + "', '" + animal.especie + "', '" + animal.habitat + "', '" + animal.gestacion + "', '" + animal.camada + "', '" + animal.longevidad + "', '" + animal.peso + "', '" + animal.ubicacionGeografica + "', '" + animal.alimentacion + "' );";
                 MySqlCommand query = new MySqlCommand(insert, conexion);
                 MySqlDataReader myReader;
                 myReader = query.ExecuteReader();
                 conexion.Close();
                 return Ok();
             }
+
+
         }
 
         public IHttpActionResult putAnimal(AnimalViewModel animal)
@@ -176,7 +178,7 @@ namespace Conexion.Controllers
             using (MySqlConnection conexion = ConexionBase.GetDBConnection())
             {
                 conexion.Open();
-                string update = "update veterinarios set nombreCientifico='" + animal.nombreCientifico + "',nombreComun='" + animal.nombreComun + "',familia='" + animal.familia + "',clase='" + animal.clase + "',orden='" + animal.orden + "',especie='" + animal.especie + "', habitat='" + animal.habitat + "',gestacion='" + animal.gestacion + "',camada='" + animal.camada + "',longevidad='" + animal.longevidad + "',peso='" + animal.peso + "',ubicacionGeografica='" + animal.ubicacionGeografica + "',Alimentacion='" + animal.alimentacion + "'where id='" + animal.id + "';";
+                string update = "update animal set nombreCientifico='" + animal.nombreCientifico + "',nombreComun='" + animal.nombreComun + "',familia='" + animal.familia + "',clase='" + animal.clase + "',orden='" + animal.orden + "',especie='" + animal.especie + "', habitat='" + animal.habitat + "',gestacion='" + animal.gestacion + "',camada='" + animal.camada + "',longevidad='" + animal.longevidad + "',peso='" + animal.peso + "',ubicacionGeografica='" + animal.ubicacionGeografica + "',Alimentacion='" + animal.alimentacion + "'where id='" + animal.id + "';";
                 MySqlCommand query = new MySqlCommand(update, conexion);
                 MySqlDataReader myReader;
                 myReader = query.ExecuteReader();

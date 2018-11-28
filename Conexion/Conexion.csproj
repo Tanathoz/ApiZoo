@@ -249,6 +249,7 @@
     <Compile Include="ConexionBase.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AnimalController.cs" />
+    <Compile Include="Controllers\EjemplarController.cs" />
     <Compile Include="Controllers\EspecieController.cs" />
     <Compile Include="Controllers\FamiliaController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -262,6 +263,7 @@
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\AnimalViewModel.cs" />
+    <Compile Include="Models\EjemplarViewModel.cs" />
     <Compile Include="Models\EspecieViewModel.cs" />
     <Compile Include="Models\FamiliaViewModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />

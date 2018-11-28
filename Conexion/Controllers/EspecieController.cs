@@ -62,6 +62,38 @@ namespace Conexion.Controllers
             }
         }
 
+
+        public IHttpActionResult GetEspecieById(int id)
+        {
+            List<EspecieViewModel> lstEspecies = new List<EspecieViewModel>();
+            using (MySqlConnection conexion = ConexionBase.GetDBConnection())
+            {
+                conexion.Open();
+                MySqlCommand query = new MySqlCommand("select idEspecie, nombre from especies where idFamilia="+id.ToString(),conexion);
+                using (var reader = query.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        lstEspecies.Add(new EspecieViewModel()
+                        {
+                            idEspecie = Convert.ToInt32(reader["idEspecie"]),
+                            nombre = reader["nombre"].ToString()
+
+                        });
+                    }
+                }
+            }
+
+            if (lstEspecies.Count == 0)
+            {
+                return NotFound();
+            }else
+            {
+                return Ok(lstEspecies);
+            }
+             
+        }
+
         //obtener especies por ID falta
     }
 }
