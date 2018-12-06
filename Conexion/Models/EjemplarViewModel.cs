@@ -9,9 +9,10 @@ namespace Conexion.Models
     {
         public string marcaje { get; set; }
         public int idAnimal { get; set; }
+        public string nombreComun { get; set;}
         public string fechaNacimiento { get; set; }
         public string fechaAlta {get; set;}
         public string sexo { get; set; }
-        public string nombre { get; set; }
+        public string nombrePropio { get; set; }
     }
 }

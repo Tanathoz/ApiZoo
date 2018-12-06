@@ -17,7 +17,7 @@ namespace Conexion.Controllers
             using (MySqlConnection conexion = ConexionBase.GetDBConnection())
             {
                 conexion.Open();
-                MySqlCommand query = new MySqlCommand("select * from ejemplares", conexion);
+                MySqlCommand query = new MySqlCommand("select e.marcaje, e.idAnimal, a.nombreComun, e.fechaNacimiento, e.fechaAlta, e.sexo , e.nombrePropio from ejemplares e inner join animal a on e.idAnimal= a.id", conexion);
                 using (var reader = query.ExecuteReader())
                 {
                     while (reader.Read())
@@ -26,10 +26,11 @@ namespace Conexion.Controllers
                         {
                             marcaje = reader["marcaje"].ToString(),
                             idAnimal = Convert.ToInt32(reader["idAnimal"]),
+                            nombreComun = reader["nombreComun"].ToString(),
                             fechaNacimiento = reader["fechaNacimiento"].ToString(),
                             fechaAlta = reader["fechaAlta"].ToString(),
                             sexo = reader["sexo"].ToString(),
-                            nombre = reader["nombrePropio"].ToString()
+                            nombrePropio = reader["nombrePropio"].ToString()
 
                         });
                     }
@@ -50,18 +51,24 @@ namespace Conexion.Controllers
             EjemplarViewModel ejemplar = null;
             using (MySqlConnection conexion = ConexionBase.GetDBConnection())
             {
+               
+                MySqlCommand query = new MySqlCommand("consultarEjemplar", conexion);
+                query.CommandType = CommandType.StoredProcedure;
+                query.Parameters.AddWithValue("@valor", marcaje);
+                query.Parameters["@valor"].Direction = ParameterDirection.Input;
                 conexion.Open();
-                MySqlCommand query = new MySqlCommand("Select idAnimal, fechaNacimiento, fechaAlta, sexo, nombrePropio where marcaje=" + marcaje.ToString(), conexion);
+
                 using (var reader = query.ExecuteReader())
                 {
                     reader.Read();
                     ejemplar = new EjemplarViewModel()
                     {
                         idAnimal = Convert.ToInt32(reader["idAnimal"]),
+                        nombreComun = reader["nombreComun"].ToString(),
                         fechaNacimiento = reader["fechaNacimiento"].ToString(),
                         fechaAlta = reader["fechaAlta"].ToString(),
                         sexo = reader["sexo"].ToString(),
-                        nombre = reader["nombrePropio"].ToString()
+                        nombrePropio = reader["nombrePropio"].ToString()
                     };
 
                     if (ejemplar == null)
@@ -94,11 +101,11 @@ namespace Conexion.Controllers
                         lstEjemplar.Add(new EjemplarViewModel()
                         {
                             marcaje = reader["marcaje"].ToString(),
-                            idAnimal = Convert.ToInt32(reader["idAnimal"]),
-                            fechaNacimiento = reader["fechaNaciminto"].ToString(),
+                            nombreComun = reader["nombreComun"].ToString(),
+                            fechaNacimiento = reader["fechaNacimiento"].ToString(),
                             fechaAlta = reader["fechaAlta"].ToString(),
                             sexo = reader["sexo"].ToString(),
-                            nombre = reader["nombrePropio"].ToString()
+                            nombrePropio = reader["nombrePropio"].ToString()
                         });
 
                     }
@@ -123,7 +130,7 @@ namespace Conexion.Controllers
             using (MySqlConnection conexion = ConexionBase.GetDBConnection())
             {
                 conexion.Open();
-                string insert = "insert into ejemplares (marcaje, idAnimal, fechaNacimiento, fechaAlta, sexo, nombrePropio) values ( '" + ejemplar.marcaje + "' , '" + ejemplar.idAnimal + "' , '" + ejemplar.fechaNacimiento + "',  '" + ejemplar.fechaAlta + "', '" + ejemplar.sexo + "' , '" + ejemplar.nombre + "'  );";
+                string insert = "insert into ejemplares (marcaje, idAnimal, fechaNacimiento, fechaAlta, sexo, nombrePropio) values ( '" + ejemplar.marcaje + "' , '" + ejemplar.idAnimal + "' , '" + ejemplar.fechaNacimiento + "',  '" + ejemplar.fechaAlta + "', '" + ejemplar.sexo + "' , '" + ejemplar.nombrePropio + "'  );";
                 MySqlCommand query = new MySqlCommand(insert, conexion);
                 MySqlDataReader myReader;
                 myReader = query.ExecuteReader();
@@ -132,14 +139,14 @@ namespace Conexion.Controllers
             }
         }
 
-        public IHttpActionResult putAnimal(EjemplarViewModel ejemplar)
+        public IHttpActionResult putEjemplar(EjemplarViewModel ejemplar)
         {
             if (!ModelState.IsValid)
                 return BadRequest("Modelo de datos invalido");
             using (MySqlConnection conexion = ConexionBase.GetDBConnection())
             {
                 conexion.Open();
-                string update = "update ejemplares set idAnimal= '" + ejemplar.idAnimal + "', fechaNacimiento='" + ejemplar.fechaNacimiento + "' , fechaAlta='" + ejemplar.sexo + "', nombrePropio='" + ejemplar.nombre + "' ;";
+                string update = "update ejemplares set idAnimal=" + ejemplar.idAnimal + ",fechaNacimiento='" + ejemplar.fechaNacimiento + "' ,fechaAlta='" + ejemplar.fechaAlta + "',sexo='" + ejemplar.sexo + "',nombrePropio='" + ejemplar.nombrePropio + "' where marcaje='" + ejemplar.marcaje + "';";
                 MySqlCommand query = new MySqlCommand(update, conexion);
                 MySqlDataReader myReader;
                 myReader = query.ExecuteReader();
@@ -148,14 +155,15 @@ namespace Conexion.Controllers
             }
         }
 
-        public IHttpActionResult Delete(string  marcaje)
+        public IHttpActionResult Delete(string  marcajeDelete)
         {
-            if (marcaje == null || marcaje ==string.Empty)
+            if (marcajeDelete == null || marcajeDelete ==string.Empty)
                 return BadRequest("Marcaje no válido");
+
             using (MySqlConnection conexion = ConexionBase.GetDBConnection())
             {
                 conexion.Open();
-                string delete = "delete from ejemplares where marcaje=" + marcaje.ToString();
+                string delete = "delete from ejemplares where marcaje='" + marcajeDelete.ToString()+"';";
                 MySqlCommand query = new MySqlCommand(delete, conexion);
                 MySqlDataReader myReader;
                 myReader = query.ExecuteReader();
