@@ -58,8 +58,13 @@ namespace Conexion.Controllers
 
             using (MySqlConnection conexion = ConexionBase.GetDBConnection())
             {
+                
+
+                MySqlCommand query = new MySqlCommand("consultarDietaByMarcaje",conexion);
+                query.CommandType = CommandType.StoredProcedure;
+                query.Parameters.AddWithValue("@valor",marcaje);
+                query.Parameters["@valor"].Direction = ParameterDirection.Input;
                 conexion.Open();
-                MySqlCommand query = new MySqlCommand("SELECT d.marcajeEjemplar, a.nombreComun, e.nombrePropio,d.fechaCambio, d.causaCambio, d.cantidad, d.alimento, d.horario, d.consideraciones from dietaejemplar d inner join ejemplares e on d.marcajeEjemplar = e.marcaje INNER JOIN animal a on e.idAnimal=a.id  where d.marcajeEjemplar="+marcaje,conexion);
                 using (var reader = query.ExecuteReader())
                 {
                     reader.Read();
@@ -80,9 +85,11 @@ namespace Conexion.Controllers
 
                 if (dieta == null)
                 {
+                    conexion.Close();
                     return NotFound();
                 }else
                 {
+                    conexion.Close();
                     return Ok(dieta);
                 }
             }
@@ -188,7 +195,7 @@ namespace Conexion.Controllers
             using (MySqlConnection conexion = ConexionBase.GetDBConnection())
             {
                 conexion.Open();
-                string delete =" delete from dietaejemplar where marcajeEjemplar="+marcaje.ToString();
+                string delete =" delete from dietaejemplar where marcajeEjemplar='"+marcaje.ToString()+"';";
                 MySqlCommand query = new MySqlCommand(delete, conexion);
                 MySqlDataReader reader;
                 reader = query.ExecuteReader();

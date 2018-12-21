@@ -254,6 +254,9 @@
     <Compile Include="Controllers\EjemplarController.cs" />
     <Compile Include="Controllers\EspecieController.cs" />
     <Compile Include="Controllers\FamiliaController.cs" />
+    <Compile Include="Controllers\FarmacoController.cs" />
+    <Compile Include="Controllers\HojaClinicaController.cs" />
+    <Compile Include="Controllers\HojaFarmacoController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Controllers\VeteriController.cs" />
@@ -270,6 +273,9 @@
     <Compile Include="Models\EjemplarViewModel.cs" />
     <Compile Include="Models\EspecieViewModel.cs" />
     <Compile Include="Models\FamiliaViewModel.cs" />
+    <Compile Include="Models\FarmacoClinica.cs" />
+    <Compile Include="Models\FarmacoViewModel.cs" />
+    <Compile Include="Models\HojaClinicaViewModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\VeterinarioModel.cs" />
     <Compile Include="Models\VeterinarioViewModel.cs" />
