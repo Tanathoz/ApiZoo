@@ -49,13 +49,14 @@ namespace Conexion.Controllers
             using (MySqlConnection conexion = ConexionBase.GetDBConnection())
             {
                 conexion.Open();
-                MySqlCommand query = new MySqlCommand("Select f.nombre, f.via, fc.dosis, fc.frecuencia, fc.fechaAplicacion from  farmaco_clinicas fc inner join farmacos f on fc.idFarmaco=f.id where idClinica=" + idHoja.ToString(), conexion);
+                MySqlCommand query = new MySqlCommand("Select f.id,  f.nombre, f.via, fc.dosis, fc.frecuencia, DATE_FORMAT(fc.fechaAplicacion, '%Y-%m-%d' ) AS fechaAplicacion from  farmaco_clinicas fc inner join farmacos f on fc.idFarmaco=f.id where idClinica=" + idHoja.ToString(), conexion);
                 using (var reader = query.ExecuteReader())
                 {
                     while (reader.Read())
                     {
                         lstFarmacos.Add(new FarmacoClinica()
                         {
+                            idFarmaco = Convert.ToInt32(reader["id"].ToString()),
                             nombreFarmaco = reader["nombre"].ToString(),
                             via = reader["via"].ToString(),
                             dosis = reader["dosis"].ToString(),
@@ -72,9 +73,29 @@ namespace Conexion.Controllers
                 return Ok(lstFarmacos);
         }
 
+        public IHttpActionResult numeroFarmacos(int Lahoja)
+        {
+            int numFarmacos = 0;
+            using (MySqlConnection conexion = ConexionBase.GetDBConnection())
+            {
+                conexion.Open();
+                MySqlCommand query = new MySqlCommand("select  COUNT(*) as numFarmacos from farmaco_clinicas where idClinica=" + Lahoja, conexion);
+                using (var reader = query.ExecuteReader())
+                {
+                    reader.Read();
+                    numFarmacos = Convert.ToInt32(reader["numFarmacos"].ToString());
 
+                }
+            }
 
-        public IHttpActionResult PostNewHojaFarmaco(FarmacoClinica farmaco)
+            if (numFarmacos > 0)
+                return Ok(numFarmacos);
+            else
+                return NotFound();
+
+        }
+        [HttpPost]
+        public IHttpActionResult PostNewHojaFarmaco(FarmacoClinica farmaco, string data)
         {
             if (!ModelState.IsValid)
                 return BadRequest("Modelo de datos nos válido");
@@ -90,14 +111,15 @@ namespace Conexion.Controllers
             }
         }
 
-        public IHttpActionResult PutFarmaco(FarmacoClinica farmaco)
+       [HttpPut]
+       public IHttpActionResult PutFarmaco(FarmacoClinica farmacoOtro)
         {
             if (!ModelState.IsValid)
                 return BadRequest("Modelo de datos no válido");
             using (MySqlConnection conexion = ConexionBase.GetDBConnection())
             {
                 conexion.Open();
-                string update = "update farmaco_clinica set dosis='" + farmaco.dosis + "', frecuencia='" + farmaco.frecuencia + "', fechaAplicacion='" + farmaco.fechaAplicacion + "' where idClinica=" + farmaco.idClinica + " and idFarmaco=" + farmaco.idFarmaco + ";";
+                string update = "update farmaco_clinica set dosis='" + farmacoOtro.dosis + "', frecuencia='" + farmacoOtro.frecuencia + "', fechaAplicacion='" + farmacoOtro.fechaAplicacion + "' where idClinica=" + farmacoOtro.idClinica + " and idFarmaco=" + farmacoOtro.idFarmaco + ";";
                 MySqlCommand query = new MySqlCommand(update, conexion);
                 MySqlDataReader reader;
                 reader = query.ExecuteReader();

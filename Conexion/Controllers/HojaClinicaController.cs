@@ -54,21 +54,20 @@ namespace Conexion.Controllers
             HojaClinicaViewModel hoja = null;
             using (MySqlConnection conexion = ConexionBase.GetDBConnection())
             {
-                conexion.Open();
-                string consulta = "Select h.lugar, h.fecha, h.tratamiento, h.marcajeEjemplar, e.nombrePropio, a.nombreComun from hojaclinicas h inner join ejemplares e on h.marcajeEjemplar = e.marcaje inner join animal a on e.idAnimal = a.id where h.id=" + id.ToString();
+                conexion.Open(); 
+                string consulta = "Select h.id, h.lugar, DATE_FORMAT(h.fecha, '%Y-%m-%d' ) AS fecha, h.antecedentes, h.diagnostico ,h.tratamiento,h.observaciones , DATE_FORMAT(h.fechaAlta, '%Y-%m-%d') AS fechaAlta, h.marcajeEjemplar,h.idVeterinario, e.nombrePropio, a.nombreComun from hojaclinicas h inner join ejemplares e on h.marcajeEjemplar = e.marcaje inner join animal a on e.idAnimal = a.id where h.id=" + id.ToString();
                 MySqlCommand query = new MySqlCommand(consulta, conexion);
                 using (var reader = query.ExecuteReader())
                 {
                     reader.Read();
                     hoja = new HojaClinicaViewModel()
                     {
-                        id = Convert.ToInt32(reader["id"].ToString()),
+                       
                         lugar = reader["lugar"].ToString(),
                         fecha = reader["fecha"].ToString(),
                         antecedentes = reader["antecedentes"].ToString(),
                         diagnostico = reader["diagnostico"].ToString(),
                         tratamiento = reader["tratamiento"].ToString(),
-                        fechaAplicacion = reader["fechaAplicacion"].ToString(),
                         observaciones = reader["observaciones"].ToString(),
                         fechaAlta = reader["fechaAlta"].ToString(),
                         marcaje = reader["marcajeEjemplar"].ToString(),
@@ -169,8 +168,8 @@ namespace Conexion.Controllers
 
             }
         }
-
-        public IHttpActionResult PujHojaClinica (HojaClinicaViewModel hoja, string hol)
+        [HttpPut]
+        public IHttpActionResult PujHojaClinica (HojaClinicaViewModel hoja)
         {
             if (!ModelState.IsValid)
                 return BadRequest("Modelo de datos hoja clinica invalido");
@@ -179,7 +178,7 @@ namespace Conexion.Controllers
                 MySqlCommand query =new MySqlCommand("editarHoja", conexion);
                 query.CommandType = CommandType.StoredProcedure;
                 query.Parameters.AddWithValue("@idHoja", hoja.id);
-                query.Parameters.AddWithValue("@lugar", hoja.id);
+                query.Parameters.AddWithValue("@lugar", hoja.lugar);
                 query.Parameters.AddWithValue("@fecha", hoja.fecha);
                 query.Parameters.AddWithValue("@antecedentes", hoja.antecedentes);
                 query.Parameters.AddWithValue("@diagnostico", hoja.diagnostico);
@@ -187,7 +186,7 @@ namespace Conexion.Controllers
                 query.Parameters.AddWithValue("@fechaAplicacion", hoja.fechaAplicacion);
                 query.Parameters.AddWithValue("@observaciones", hoja.observaciones);
                 query.Parameters.AddWithValue("@fechaAlta", hoja.fechaAlta);
-                query.Parameters.AddWithValue("@marcaje", hoja.marcaje);
+                query.Parameters.AddWithValue("@marcajeEjemplar", hoja.marcaje);
                 query.Parameters.AddWithValue("@idVeterinario", hoja.idVeterinario);
                 query.Parameters["@idHoja"].Direction = ParameterDirection.Input;
                 query.Parameters["@lugar"].Direction = ParameterDirection.Input;
@@ -198,7 +197,7 @@ namespace Conexion.Controllers
                 query.Parameters["@fechaAplicacion"].Direction = ParameterDirection.Input;
                 query.Parameters["@observaciones"].Direction = ParameterDirection.Input;
                 query.Parameters["@fechaAlta"].Direction = ParameterDirection.Input;
-                query.Parameters["@marcaje"].Direction = ParameterDirection.Input;
+                query.Parameters["@marcajeEjemplar"].Direction = ParameterDirection.Input;
                 query.Parameters["@idVeterinario"].Direction = ParameterDirection.Input;
 
                 conexion.Open();
