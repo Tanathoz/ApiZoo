@@ -6,11 +6,13 @@ using MySql.Data.MySqlClient;
 using Conexion.Models;
 using System.Web.Http;
 using System.Data;
+using System.Web.Http.Cors;
 
 namespace Conexion.Controllers
 {
     public class FarmacoController : ApiController
     {
+      //  [EnableCors(origins: "http://localhost:64155/", headers: "*", methods: "*")]
         public IHttpActionResult GetAllFarmacos()
         {
             List<FarmacoViewModel> lstFarmacos = new List<FarmacoViewModel>();
@@ -43,7 +45,7 @@ namespace Conexion.Controllers
            
         }
 
-
+       // [EnableCors(origins: "http://localhost:64155/", headers: "*", methods: "*")]
         public IHttpActionResult GetFarmacoById(int id)
         {
             FarmacoViewModel farmaco = null;
@@ -103,7 +105,7 @@ namespace Conexion.Controllers
             }
         }
 
-
+     //   [EnableCors(origins: "http://localhost:64155/", headers:"*", methods:"*")]
         public IHttpActionResult PostNewFarmaco(FarmacoViewModel farmaco)
         {
             if (!ModelState.IsValid)
@@ -120,7 +122,7 @@ namespace Conexion.Controllers
 
             }
         }
-
+     //   [EnableCors(origins: "http://localhost:64155/", headers: "*", methods: "*")]
         public IHttpActionResult PutFarmaco(FarmacoViewModel farmaco)
         {
             if (!ModelState.IsValid)
@@ -136,6 +138,8 @@ namespace Conexion.Controllers
 
             }
         }
+
+     //   [EnableCors(origins: "http://localhost:64155/", headers: "*", methods: "*")]
         public IHttpActionResult Delete(int id)
         {
             if (id <= 0)

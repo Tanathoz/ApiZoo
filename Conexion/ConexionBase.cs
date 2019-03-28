@@ -7,10 +7,17 @@ namespace Conexion
 {
     public class ConexionBase
     {
-        static  string host = "mysql5019.site4now.net";
+
+        /* static  string host = "chilpan.mysql.database.azure.com";
+         static int port = 3306;
+         static string database = "Zoochilpan"; utf8_general_ci	
+         static string username = "Tanathoz@chilpan";
+         static string password = "Itachi313";*/
+
+        static string host = "mysql5009.site4now.net";
         static int port = 3306;
-        static string database = "db_a42b84_zoo";
-        static string username = "a42b84_zoo";
+        static string database = "db_a463da_zoo";
+        static string username = "a463da_zoo";
         static string password = "itachi313";
 
         public static MySqlConnection GetDBConnection()
