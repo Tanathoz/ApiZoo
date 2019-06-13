@@ -63,7 +63,7 @@ namespace Conexion.Controllers
                     reader.Read();
                     hoja = new HojaClinicaViewModel()
                     {
-                       
+                        
                         lugar = reader["lugar"].ToString(),
                         fecha = reader["fecha"].ToString(),
                         antecedentes = reader["antecedentes"].ToString(),

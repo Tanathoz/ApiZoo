@@ -62,6 +62,7 @@ namespace Conexion.Controllers
                     reader.Read();
                     hoja = new NecropsiaViewModel()
                     {
+                        id = id,
                         lugar = reader["lugar"].ToString(),
                         fecha = reader["fecha"].ToString(),
                         hora = reader["hora"].ToString(),
